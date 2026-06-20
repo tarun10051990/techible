@@ -5,11 +5,14 @@ import AdminSidebar from "./AdminSidebar";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session")?.value;
+  const sessionCookie = cookieStore.get("session_token")?.value;
 
-  if (!sessionToken) redirect("/login");
+  if (!sessionCookie) redirect("/login");
 
-  const user = await prisma.user.findUnique({ where: { id: sessionToken } });
+  const [userId] = sessionCookie.split(":");
+  if (!userId) redirect("/login");
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user || user.role !== "admin") redirect("/login");
 
   return (
