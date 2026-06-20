@@ -1,95 +1,101 @@
-import { Target, Users, Zap, Award, Globe, Heart } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = { title: "Techible | About Us" };
 
 export default function AboutUsPage() {
   return (
-    <div>
-      <section className="bg-gradient-to-br from-blue-600 to-purple-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-bold mb-4">About Techible</h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-            We are building India&apos;s largest platform connecting students with tech opportunities, 
-            mentors, and world-class education.
+    <div className="bg-white min-h-screen">
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-16 md:py-24">
+        <div className="absolute top-10 right-20 w-32 h-32 border-2 border-blue-200/20 rounded-full"></div>
+        <div className="absolute bottom-10 left-10 w-20 h-20 border-2 border-indigo-200/20 rounded-full"></div>
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <div className="inline-flex items-center gap-2 bg-blue-50 text-[#1a73e8] px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <i className="fa-solid fa-heart text-xs"></i> Our Story
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
+            About <span className="text-[#1a73e8]">Techible</span>
+          </h1>
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+            We connect Indian students with internships, mentors, colleges, and opportunities to learn, connect, and grow.
           </p>
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
-              <p className="text-gray-600 mb-4">
-                Techible was founded with a simple yet powerful mission: to democratize access to tech 
-                opportunities for every student in India. We believe that talent is everywhere, but 
-                opportunity is not equally distributed.
-              </p>
-              <p className="text-gray-600">
-                Our platform bridges this gap by connecting students with top companies for internships, 
-                world-class courses for skill development, expert mentors for guidance, and a vibrant 
-                community of tech enthusiasts.
-              </p>
+      {/* Mission */}
+      <section className="max-w-7xl mx-auto px-4 py-16">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-4">Our <span className="text-[#1a73e8]">Mission</span></h2>
+            <p className="text-gray-600 leading-relaxed mb-4">
+              Techible was founded with a simple belief: every student deserves access to quality opportunities regardless of their background or location. We bridge the gap between students and the tech industry by providing a unified platform for internships, courses, mentorship, and community.
+            </p>
+            <p className="text-gray-600 leading-relaxed">
+              Our platform curates opportunities from top research labs, companies, and educational institutions across India, making them easily discoverable for students who are eager to learn and grow.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-blue-50 rounded-2xl p-6 text-center">
+              <i className="fa-solid fa-users text-3xl text-[#1a73e8] mb-3"></i>
+              <p className="text-3xl font-extrabold text-gray-900">2k+</p>
+              <p className="text-sm text-gray-500">Students</p>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { icon: Target, label: "500+", desc: "Active Internships" },
-                { icon: Users, label: "50+", desc: "Partner Institutes" },
-                { icon: Award, label: "200+", desc: "Expert Mentors" },
-                { icon: Globe, label: "10K+", desc: "Students Placed" },
-              ].map((stat) => (
-                <div key={stat.desc} className="bg-blue-50 rounded-xl p-6 text-center">
-                  <stat.icon className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-gray-900">{stat.label}</p>
-                  <p className="text-sm text-gray-600">{stat.desc}</p>
-                </div>
-              ))}
+            <div className="bg-amber-50 rounded-2xl p-6 text-center">
+              <i className="fa-solid fa-chalkboard-user text-3xl text-amber-500 mb-3"></i>
+              <p className="text-3xl font-extrabold text-gray-900">50+</p>
+              <p className="text-sm text-gray-500">Mentors</p>
+            </div>
+            <div className="bg-green-50 rounded-2xl p-6 text-center">
+              <i className="fa-solid fa-code-branch text-3xl text-green-500 mb-3"></i>
+              <p className="text-3xl font-extrabold text-gray-900">100+</p>
+              <p className="text-sm text-gray-500">Projects</p>
+            </div>
+            <div className="bg-purple-50 rounded-2xl p-6 text-center">
+              <i className="fa-solid fa-briefcase text-3xl text-purple-500 mb-3"></i>
+              <p className="text-3xl font-extrabold text-gray-900">200+</p>
+              <p className="text-sm text-gray-500">Internships</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Our Values</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+      {/* Values */}
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-2">What We <span className="text-[#1a73e8]">Stand For</span></h2>
+            <p className="text-gray-500">The principles that guide everything we do</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: Zap, title: "Innovation", desc: "We constantly innovate to provide the best platform experience for students and companies alike." },
-              { icon: Heart, title: "Inclusivity", desc: "We believe in equal access to opportunities regardless of background, location, or institution." },
-              { icon: Award, title: "Excellence", desc: "We partner only with the best companies, institutes, and mentors to ensure quality outcomes." },
-            ].map((value) => (
-              <div key={value.title} className="bg-white rounded-xl p-6 border border-gray-200">
-                <value.icon className="w-10 h-10 text-blue-600 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{value.title}</h3>
-                <p className="text-gray-600 text-sm">{value.desc}</p>
+              { icon: "fa-lightbulb", color: "text-amber-500", bg: "bg-amber-50", title: "Innovation First", desc: "We embrace new technologies and approaches to deliver the best experience for students and educators." },
+              { icon: "fa-handshake", color: "text-blue-500", bg: "bg-blue-50", title: "Community Driven", desc: "Built by students, for students. Our community shapes everything we build and every decision we make." },
+              { icon: "fa-scale-balanced", color: "text-green-500", bg: "bg-green-50", title: "Equal Access", desc: "Every student deserves the same opportunities. We work to level the playing field for all." },
+            ].map((v) => (
+              <div key={v.title} className="bg-white rounded-2xl border border-gray-100 p-8 hover:shadow-lg transition-shadow">
+                <div className={`w-14 h-14 ${v.bg} rounded-2xl flex items-center justify-center mb-4`}>
+                  <i className={`fa-solid ${v.icon} text-2xl ${v.color}`}></i>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{v.title}</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">{v.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Team</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-12">
-            We are a passionate team of engineers, educators, and entrepreneurs dedicated to 
-            transforming tech education and career outcomes in India.
-          </p>
-          <div className="grid md:grid-cols-4 gap-6">
-            {[
-              { name: "Rahul Sharma", role: "Founder & CEO" },
-              { name: "Priya Patel", role: "CTO" },
-              { name: "Amit Kumar", role: "Head of Partnerships" },
-              { name: "Sneha Gupta", role: "Head of Community" },
-            ].map((member) => (
-              <div key={member.name} className="text-center">
-                <div className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-3">
-                  <span className="text-white text-2xl font-bold">{member.name.charAt(0)}</span>
-                </div>
-                <h3 className="font-semibold text-gray-900">{member.name}</h3>
-                <p className="text-sm text-gray-500">{member.role}</p>
-              </div>
-            ))}
+      {/* CTA */}
+      <section className="max-w-7xl mx-auto px-4 py-16">
+        <div className="bg-gradient-to-r from-[#1a73e8] to-indigo-600 rounded-2xl p-8 md:p-12 text-center text-white">
+          <h2 className="text-3xl font-extrabold mb-3">Ready to Start Your Journey?</h2>
+          <p className="text-blue-100 mb-6 max-w-md mx-auto">Join thousands of students who are already learning, growing, and building their careers with Techible.</p>
+          <div className="flex items-center justify-center gap-4">
+            <Link href="/signup" className="px-8 py-3 bg-white text-[#1a73e8] font-bold rounded-full hover:bg-blue-50 transition-colors">
+              Get Started
+            </Link>
+            <Link href="/internships" className="px-8 py-3 border-2 border-white/50 text-white font-bold rounded-full hover:bg-white/10 transition-colors">
+              Browse Internships
+            </Link>
           </div>
         </div>
       </section>

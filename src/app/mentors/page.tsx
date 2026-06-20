@@ -1,60 +1,61 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { UserCheck, Star, Clock, Briefcase } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Techible | Mentors" };
 
 export default async function MentorsPage() {
-  const mentors = await prisma.mentor.findMany({
-    where: { isActive: true },
-    orderBy: { rating: "desc" },
-  });
+  const mentors = await prisma.mentor.findMany({ where: { isActive: true }, orderBy: { createdAt: "desc" } });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Mentors</h1>
-        <p className="text-gray-600 mt-2">Get expert career guidance from industry professionals</p>
-      </div>
-      {mentors.length === 0 ? (
-        <div className="text-center py-20 text-gray-500">
-          <UserCheck className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-          <p>No mentors available right now. Check back soon!</p>
+    <div className="bg-white min-h-screen">
+      <section className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-white to-yellow-50 py-12 md:py-16">
+        <div className="absolute top-8 right-16 w-24 h-24 border-2 border-orange-200/30 rounded-full"></div>
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="inline-flex items-center gap-2 bg-orange-50 text-orange-600 px-3 py-1.5 rounded-full text-xs font-semibold mb-4">
+            <i className="fa-solid fa-chalkboard-user text-xs"></i>
+            Industry Experts
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-3">
+            Get <span className="text-[#1a73e8]">Mentorship</span>
+          </h1>
+          <p className="text-gray-500 max-w-md">1-on-1 sessions with professionals from top companies</p>
         </div>
-      ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mentors.map((mentor) => (
-            <div key={mentor.id} className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">{mentor.name.charAt(0)}</span>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {mentors.length === 0 ? (
+          <div className="text-center py-20">
+            <i className="fa-solid fa-user-tie text-5xl text-gray-200 mb-4"></i>
+            <p className="text-gray-500">No mentors listed yet.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+            {mentors.map((mentor) => (
+              <div key={mentor.id} className="bg-white rounded-2xl border border-gray-100 p-5 text-center hover:shadow-lg transition-shadow">
+                <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-3 overflow-hidden">
+                  {mentor.avatar ? (
+                    <img src={mentor.avatar} alt={mentor.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <i className="fa-solid fa-user text-2xl text-[#1a73e8]/40"></i>
+                  )}
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">{mentor.name}</h3>
-                  <p className="text-sm text-gray-600">{mentor.title}</p>
-                  {mentor.company && <p className="text-xs text-gray-500">{mentor.company}</p>}
+                <h3 className="font-bold text-sm text-gray-900">{mentor.name}</h3>
+                <p className="text-xs text-gray-500 mt-0.5">{mentor.title}</p>
+                <p className="text-xs text-gray-400">{mentor.company}</p>
+                <div className="flex flex-wrap justify-center gap-1 mt-2">
+                  {mentor.expertise.split(",").slice(0, 2).map((s) => (
+                    <span key={s} className="text-[10px] font-semibold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">{s.trim()}</span>
+                  ))}
                 </div>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-3">
-                {mentor.expertise.split(",").slice(0, 3).map((skill) => (
-                  <span key={skill} className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">{skill.trim()}</span>
-                ))}
-              </div>
-              <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                <span className="flex items-center gap-1"><Star className="w-4 h-4 text-yellow-500" />{mentor.rating}</span>
-                <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{mentor.sessions} sessions</span>
-                <span className="flex items-center gap-1"><Briefcase className="w-4 h-4" />{mentor.experience}y exp</span>
-              </div>
-              <div className="flex items-center justify-between pt-3 border-t">
-                <span className="font-semibold text-gray-900">{mentor.price === 0 ? "Free" : `₹${mentor.price}/session`}</span>
-                <button className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <button className="mt-3 w-full py-2 text-xs font-bold text-[#1a73e8] border border-[#1a73e8] rounded-full hover:bg-[#1a73e8] hover:text-white transition-colors">
                   Book Session
                 </button>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

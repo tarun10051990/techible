@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
 
 interface College { id: string; name: string; }
 interface Faculty { id: string; name: string; designation: string; department: string; specialization: string | null; email: string | null; publications: number; isActive: boolean; college: College; collegeId: string; }
@@ -23,7 +22,7 @@ export default function AdminFacultyPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6"><h1 className="text-2xl font-bold text-gray-900">Manage Faculty</h1><button onClick={openCreate} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium inline-flex items-center gap-2"><Plus className="w-4 h-4" /> Add Faculty</button></div>
+      <div className="flex items-center justify-between mb-6"><h1 className="text-2xl font-bold text-gray-900">Manage Faculty</h1><button onClick={openCreate} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium inline-flex items-center gap-2"><i className="fa-solid fa-plus text-xs"></i> Add Faculty</button></div>
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b"><tr><th className="text-left px-4 py-3 font-medium text-gray-600">Name</th><th className="text-left px-4 py-3 font-medium text-gray-600">Designation</th><th className="text-left px-4 py-3 font-medium text-gray-600">College</th><th className="text-left px-4 py-3 font-medium text-gray-600">Department</th><th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th></tr></thead>
@@ -34,7 +33,7 @@ export default function AdminFacultyPage() {
                 <td className="px-4 py-3 text-gray-600">{item.designation}</td>
                 <td className="px-4 py-3 text-gray-600">{item.college.name}</td>
                 <td className="px-4 py-3 text-gray-600">{item.department}</td>
-                <td className="px-4 py-3 text-right space-x-2"><button onClick={() => openEdit(item)} className="p-1 hover:bg-gray-100 rounded"><Pencil className="w-4 h-4 text-gray-500" /></button><button onClick={() => handleDelete(item.id)} className="p-1 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4 text-red-500" /></button></td>
+                <td className="px-4 py-3 text-right space-x-2"><button onClick={() => openEdit(item)} className="p-1 hover:bg-gray-100 rounded"><i className="fa-solid fa-pen text-xs text-gray-500"></i></button><button onClick={() => handleDelete(item.id)} className="p-1 hover:bg-red-50 rounded"><i className="fa-solid fa-trash text-xs text-red-500"></i></button></td>
               </tr>
             ))}
           </tbody>
@@ -44,7 +43,7 @@ export default function AdminFacultyPage() {
       {showForm && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center" onClick={() => setShowForm(false)}>
           <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[85vh] overflow-y-auto m-4" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-4 border-b"><h2 className="text-lg font-semibold">{editing ? "Edit" : "Add"} Faculty</h2><button onClick={() => setShowForm(false)}><X className="w-5 h-5 text-gray-400" /></button></div>
+            <div className="flex items-center justify-between p-4 border-b"><h2 className="text-lg font-semibold">{editing ? "Edit" : "Add"} Faculty</h2><button onClick={() => setShowForm(false)}><i className="fa-solid fa-xmark text-sm text-gray-400"></i></button></div>
             <form onSubmit={handleSubmit} className="p-4 space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div><label className="block text-xs font-medium text-gray-600 mb-1">Name *</label><input required className="w-full px-2 py-1.5 border rounded text-sm" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>

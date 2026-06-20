@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface SearchResult {
@@ -11,7 +10,7 @@ interface SearchResult {
   subtitle?: string;
 }
 
-export default function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export default function SearchModal({ isOpen: open, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -55,7 +54,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200">
-          <Search className="w-5 h-5 text-gray-400" />
+          <i className="fa-solid fa-search text-sm text-gray-400"></i>
           <input
             ref={inputRef}
             type="text"
@@ -68,7 +67,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
             }}
           />
           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
-            <X className="w-4 h-4 text-gray-400" />
+            <i className="fa-solid fa-xmark text-xs text-gray-400"></i>
           </button>
         </div>
 

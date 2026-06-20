@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Save } from "lucide-react";
 
 interface Settings { id: string; siteName: string; tagline: string; contactEmail: string | null; contactPhone: string | null; address: string | null; twitter: string | null; linkedin: string | null; instagram: string | null; internshipCount: string; instituteCount: string; mentorCount: string; }
 
@@ -46,7 +45,7 @@ export default function AdminSettingsPage() {
           <div><label className="block text-sm font-medium text-gray-700 mb-1">Instagram</label><input className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" value={form.instagram} onChange={(e) => setForm({ ...form, instagram: e.target.value })} /></div>
         </div>
         <button type="submit" className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2">
-          <Save className="w-4 h-4" />{saved ? "Saved!" : "Save Settings"}
+          <i className="fa-solid fa-floppy-disk text-xs"></i>{saved ? "Saved!" : "Save Settings"}
         </button>
       </form>
     </div>

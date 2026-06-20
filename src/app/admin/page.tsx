@@ -1,67 +1,100 @@
 import { prisma } from "@/lib/prisma";
-import { Briefcase, BookOpen, GraduationCap, UserCheck, Calendar, MessageSquare, Users, HeadphonesIcon } from "lucide-react";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
-  const [internships, courses, colleges, mentors, events, posts, users, tickets] = await Promise.all([
+  const [users, internships, courses, colleges, mentors, events, posts, tickets] = await Promise.all([
+    prisma.user.count(),
     prisma.internship.count(),
     prisma.course.count(),
     prisma.college.count(),
     prisma.mentor.count(),
     prisma.event.count(),
     prisma.post.count(),
-    prisma.user.count(),
-    prisma.supportTicket.count({ where: { status: { not: "resolved" } } }),
+    prisma.supportTicket.count(),
   ]);
 
   const stats = [
-    { label: "Internships", count: internships, icon: Briefcase, color: "bg-blue-100 text-blue-600" },
-    { label: "Courses", count: courses, icon: BookOpen, color: "bg-purple-100 text-purple-600" },
-    { label: "Colleges", count: colleges, icon: GraduationCap, color: "bg-indigo-100 text-indigo-600" },
-    { label: "Mentors", count: mentors, icon: UserCheck, color: "bg-green-100 text-green-600" },
-    { label: "Events", count: events, icon: Calendar, color: "bg-orange-100 text-orange-600" },
-    { label: "Posts", count: posts, icon: MessageSquare, color: "bg-teal-100 text-teal-600" },
-    { label: "Users", count: users, icon: Users, color: "bg-pink-100 text-pink-600" },
-    { label: "Open Tickets", count: tickets, icon: HeadphonesIcon, color: "bg-red-100 text-red-600" },
+    { label: "Users", value: users, icon: "fa-users", color: "text-blue-500", bg: "bg-blue-50", href: "/admin/users" },
+    { label: "Internships", value: internships, icon: "fa-briefcase", color: "text-purple-500", bg: "bg-purple-50", href: "/admin/internships" },
+    { label: "Courses", value: courses, icon: "fa-graduation-cap", color: "text-green-500", bg: "bg-green-50", href: "/admin/courses" },
+    { label: "Colleges", value: colleges, icon: "fa-building-columns", color: "text-indigo-500", bg: "bg-indigo-50", href: "/admin/colleges" },
+    { label: "Mentors", value: mentors, icon: "fa-chalkboard-user", color: "text-orange-500", bg: "bg-orange-50", href: "/admin/mentors" },
+    { label: "Events", value: events, icon: "fa-calendar-days", color: "text-pink-500", bg: "bg-pink-50", href: "/admin/events" },
+    { label: "Posts", value: posts, icon: "fa-newspaper", color: "text-teal-500", bg: "bg-teal-50", href: "/admin/posts" },
+    { label: "Support Tickets", value: tickets, icon: "fa-headset", color: "text-red-500", bg: "bg-red-50", href: "/admin/support" },
   ];
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {stats.map((stat) => (
-          <div key={stat.label} className="bg-white rounded-xl border border-gray-200 p-5">
-            <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${stat.color}`}>
-                <stat.icon className="w-5 h-5" />
+      <div className="mb-8">
+        <h1 className="text-2xl font-extrabold text-gray-900">Dashboard</h1>
+        <p className="text-sm text-gray-500">Overview of your Techible platform</p>
+      </div>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {stats.map((s) => (
+          <Link key={s.label} href={s.href} className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-3">
+              <div className={`w-10 h-10 ${s.bg} rounded-xl flex items-center justify-center`}>
+                <i className={`fa-solid ${s.icon} ${s.color}`}></i>
               </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{stat.count}</p>
-                <p className="text-sm text-gray-500">{stat.label}</p>
-              </div>
+              <i className="fa-solid fa-arrow-right text-gray-300 text-xs"></i>
             </div>
-          </div>
+            <p className="text-2xl font-extrabold text-gray-900">{s.value}</p>
+            <p className="text-xs font-semibold text-gray-400">{s.label}</p>
+          </Link>
         ))}
       </div>
 
-      <div className="mt-8 bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { label: "Add Internship", href: "/admin/internships" },
-            { label: "Add Course", href: "/admin/courses" },
-            { label: "Add College", href: "/admin/colleges" },
-            { label: "Add Mentor", href: "/admin/mentors" },
-            { label: "Add Event", href: "/admin/events" },
-            { label: "Add Post", href: "/admin/posts" },
-            { label: "Add Summer School", href: "/admin/summer-schools" },
-            { label: "Manage Users", href: "/admin/users" },
-          ].map((action) => (
-            <a key={action.label} href={action.href} className="px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm font-medium text-gray-700 text-center transition-colors">
-              {action.label}
-            </a>
-          ))}
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="bg-white rounded-2xl border border-gray-100 p-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i className="fa-solid fa-bolt text-[#1a73e8]"></i> Quick Actions
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            <Link href="/admin/internships" className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-blue-50 transition-colors">
+              <i className="fa-solid fa-plus text-[#1a73e8] text-xs"></i>
+              <span className="text-sm font-medium text-gray-700">Add Internship</span>
+            </Link>
+            <Link href="/admin/courses" className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-blue-50 transition-colors">
+              <i className="fa-solid fa-plus text-[#1a73e8] text-xs"></i>
+              <span className="text-sm font-medium text-gray-700">Add Course</span>
+            </Link>
+            <Link href="/admin/events" className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-blue-50 transition-colors">
+              <i className="fa-solid fa-plus text-[#1a73e8] text-xs"></i>
+              <span className="text-sm font-medium text-gray-700">Add Event</span>
+            </Link>
+            <Link href="/admin/posts" className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-blue-50 transition-colors">
+              <i className="fa-solid fa-plus text-[#1a73e8] text-xs"></i>
+              <span className="text-sm font-medium text-gray-700">Add Post</span>
+            </Link>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-gray-100 p-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i className="fa-solid fa-info-circle text-[#1a73e8]"></i> Platform Info
+          </h2>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-500">Platform</span>
+              <span className="font-semibold text-gray-900">Techible</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-500">Version</span>
+              <span className="font-semibold text-gray-900">1.0.0</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-500">Framework</span>
+              <span className="font-semibold text-gray-900">Next.js</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-500">Database</span>
+              <span className="font-semibold text-gray-900">SQLite</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,157 +1,114 @@
 "use client";
 
 import { useState } from "react";
-import { HelpCircle, Mail, Phone, MapPin, Send, Search } from "lucide-react";
 
 export default function SupportPage() {
-  const [tab, setTab] = useState<"contact" | "track">("contact");
-  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
-  const [trackingId, setTrackingId] = useState("");
-  const [ticket, setTicket] = useState<{ trackingId: string; status: string; subject: string } | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitting(true);
-    setError("");
+    setStatus("loading");
     try {
       const res = await fetch("/api/support", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(form),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      setSubmitted(true);
-      setTrackingId(data.trackingId);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
-    }
-    setSubmitting(false);
-  }
-
-  async function handleTrack(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    try {
-      const res = await fetch(`/api/support?trackingId=${encodeURIComponent(trackingId)}`);
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      setTicket(data.ticket);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Ticket not found");
-      setTicket(null);
-    }
+      if (res.ok) { setStatus("success"); setForm({ name: "", email: "", subject: "", message: "" }); }
+      else setStatus("error");
+    } catch { setStatus("error"); }
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-gray-900">Support</h1>
-        <p className="text-gray-600 mt-2">We are here to help. Reach out to us anytime.</p>
-      </div>
+    <div className="bg-white min-h-screen">
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-cyan-50 py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="inline-flex items-center gap-2 bg-blue-50 text-[#1a73e8] px-3 py-1.5 rounded-full text-xs font-semibold mb-4">
+            <i className="fa-solid fa-headset text-xs"></i> Help Center
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-3">
+            Contact & <span className="text-[#1a73e8]">Support</span>
+          </h1>
+          <p className="text-gray-500 max-w-md">We&apos;re here to help. Send us a message and we&apos;ll respond as soon as possible.</p>
+        </div>
+      </section>
 
-      <div className="flex justify-center gap-4 mb-8">
-        <button
-          onClick={() => { setTab("contact"); setError(""); }}
-          className={`px-6 py-2 rounded-lg font-medium text-sm transition-colors ${tab === "contact" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-        >
-          Contact Us
-        </button>
-        <button
-          onClick={() => { setTab("track"); setError(""); }}
-          className={`px-6 py-2 rounded-lg font-medium text-sm transition-colors ${tab === "track" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-        >
-          Track Ticket
-        </button>
-      </div>
-
-      {tab === "contact" && !submitted && (
+      <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="md:col-span-2">
-            <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input type="text" required className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input type="email" required className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-                </div>
+          {/* Contact Info */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-2xl border border-gray-100 p-6">
+              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-3">
+                <i className="fa-solid fa-envelope text-xl text-[#1a73e8]"></i>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                <input type="text" required className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                <textarea required rows={5} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} />
-              </div>
-              {error && <p className="text-sm text-red-600">{error}</p>}
-              <button type="submit" disabled={submitting} className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2">
-                <Send className="w-4 h-4" />{submitting ? "Sending..." : "Send Message"}
-              </button>
-            </form>
-          </div>
-          <div className="space-y-4">
-            {[
-              { icon: Mail, label: "Email", value: "support@techible.io" },
-              { icon: Phone, label: "Phone", value: "+91 1800-XXX-XXXX" },
-              { icon: MapPin, label: "Address", value: "New Delhi, India" },
-            ].map((info) => (
-              <div key={info.label} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
-                <info.icon className="w-5 h-5 text-blue-600" />
-                <div>
-                  <p className="text-xs text-gray-500">{info.label}</p>
-                  <p className="text-sm font-medium text-gray-900">{info.value}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {tab === "contact" && submitted && (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <HelpCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Ticket Submitted!</h2>
-          <p className="text-gray-600 mb-4">Your tracking ID is:</p>
-          <p className="text-lg font-mono font-bold text-blue-600 bg-blue-50 inline-block px-4 py-2 rounded-lg">{trackingId}</p>
-          <p className="text-sm text-gray-500 mt-4">Save this ID to track your ticket status.</p>
-        </div>
-      )}
-
-      {tab === "track" && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <form onSubmit={handleTrack} className="flex gap-3 mb-6">
-            <input
-              type="text"
-              placeholder="Enter your tracking ID (e.g., TKT-ABC123)"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
-              value={trackingId}
-              onChange={(e) => setTrackingId(e.target.value)}
-            />
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2">
-              <Search className="w-4 h-4" /> Track
-            </button>
-          </form>
-          {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
-          {ticket && (
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-mono text-sm text-gray-600">{ticket.trackingId}</span>
-                <span className={`px-3 py-1 text-xs font-medium rounded-full capitalize ${ticket.status === "resolved" ? "bg-green-100 text-green-700" : ticket.status === "in_progress" ? "bg-yellow-100 text-yellow-700" : "bg-blue-100 text-blue-700"}`}>
-                  {ticket.status.replace("_", " ")}
-                </span>
-              </div>
-              <p className="font-medium text-gray-900">{ticket.subject}</p>
+              <h3 className="font-bold text-gray-900 mb-1">Email Us</h3>
+              <a href="mailto:info@techible.io" className="text-sm text-[#1a73e8] hover:underline">info@techible.io</a>
             </div>
-          )}
+            <div className="bg-white rounded-2xl border border-gray-100 p-6">
+              <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-3">
+                <i className="fa-brands fa-whatsapp text-xl text-green-600"></i>
+              </div>
+              <h3 className="font-bold text-gray-900 mb-1">WhatsApp</h3>
+              <p className="text-sm text-gray-500">Join our community for quick support</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-100 p-6">
+              <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-3">
+                <i className="fa-solid fa-clock text-xl text-purple-600"></i>
+              </div>
+              <h3 className="font-bold text-gray-900 mb-1">Response Time</h3>
+              <p className="text-sm text-gray-500">Usually within 24 hours</p>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div className="md:col-span-2">
+            <div className="bg-white rounded-2xl border border-gray-100 p-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Send us a message</h2>
+
+              {status === "success" && (
+                <div className="mb-6 p-4 bg-green-50 border border-green-100 rounded-xl text-sm text-green-600 flex items-center gap-2">
+                  <i className="fa-solid fa-circle-check"></i> Your message has been sent successfully!
+                </div>
+              )}
+              {status === "error" && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600 flex items-center gap-2">
+                  <i className="fa-solid fa-circle-exclamation"></i> Something went wrong. Please try again.
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Name</label>
+                    <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8]" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+                    <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8]" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Subject</label>
+                  <input type="text" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} required
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8]" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Message</label>
+                  <textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} rows={5} required
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8] resize-none" />
+                </div>
+                <button type="submit" disabled={status === "loading"}
+                  className="px-8 py-3 bg-[#1a73e8] text-white font-bold rounded-xl hover:bg-[#1557b0] transition-colors disabled:opacity-50 flex items-center gap-2">
+                  {status === "loading" ? <><i className="fa-solid fa-spinner fa-spin"></i> Sending...</> : <>Send Message <i className="fa-solid fa-paper-plane text-xs"></i></>}
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
 
 interface Internship {
   id: string; title: string; company: string; location: string; type: string;
@@ -74,7 +73,7 @@ export default function AdminInternshipsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Manage Internships</h1>
         <button onClick={openCreate} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium inline-flex items-center gap-2">
-          <Plus className="w-4 h-4" /> Add Internship
+          <i className="fa-solid fa-plus text-xs"></i> Add Internship
         </button>
       </div>
 
@@ -101,8 +100,8 @@ export default function AdminInternshipsPage() {
                   </button>
                 </td>
                 <td className="px-4 py-3 text-right space-x-2">
-                  <button onClick={() => openEdit(item)} className="p-1 hover:bg-gray-100 rounded"><Pencil className="w-4 h-4 text-gray-500" /></button>
-                  <button onClick={() => handleDelete(item.id)} className="p-1 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4 text-red-500" /></button>
+                  <button onClick={() => openEdit(item)} className="p-1 hover:bg-gray-100 rounded"><i className="fa-solid fa-pen text-xs text-gray-500"></i></button>
+                  <button onClick={() => handleDelete(item.id)} className="p-1 hover:bg-red-50 rounded"><i className="fa-solid fa-trash text-xs text-red-500"></i></button>
                 </td>
               </tr>
             ))}
@@ -116,7 +115,7 @@ export default function AdminInternshipsPage() {
           <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[85vh] overflow-y-auto m-4" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-semibold">{editing ? "Edit" : "Add"} Internship</h2>
-              <button onClick={() => setShowForm(false)}><X className="w-5 h-5 text-gray-400" /></button>
+              <button onClick={() => setShowForm(false)}><i className="fa-solid fa-xmark text-sm text-gray-400"></i></button>
             </div>
             <form onSubmit={handleSubmit} className="p-4 space-y-3">
               <div className="grid grid-cols-2 gap-3">

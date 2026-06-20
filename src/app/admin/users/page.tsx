@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Trash2 } from "lucide-react";
 
 interface User { id: string; name: string; email: string; role: string; createdAt: string; }
 
@@ -30,7 +29,7 @@ export default function AdminUsersPage() {
                   </select>
                 </td>
                 <td className="px-4 py-3 text-gray-600">{new Date(user.createdAt).toLocaleDateString()}</td>
-                <td className="px-4 py-3 text-right"><button onClick={() => deleteUser(user.id)} className="p-1 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4 text-red-500" /></button></td>
+                <td className="px-4 py-3 text-right"><button onClick={() => deleteUser(user.id)} className="p-1 hover:bg-red-50 rounded"><i className="fa-solid fa-trash text-xs text-red-500"></i></button></td>
               </tr>
             ))}
           </tbody>
