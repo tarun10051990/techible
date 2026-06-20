@@ -158,6 +158,29 @@ async function main() {
     },
   });
 
+  // Subscription Plans
+  await prisma.subscriptionPlan.upsert({
+    where: { slug: "free" },
+    update: {},
+    create: { name: "Free", slug: "free", price: 0, duration: 365, features: "Build resume online,Choose from 6 templates,Preview resume,Save up to 2 resumes", resumeDownloads: 0, isPopular: false },
+  });
+  await prisma.subscriptionPlan.upsert({
+    where: { slug: "pro" },
+    update: {},
+    create: { name: "Pro", slug: "pro", price: 299, duration: 30, features: "Everything in Free,Download as PDF,Unlimited resumes,Priority support,Custom fonts", resumeDownloads: 0, isPopular: true },
+  });
+  await prisma.subscriptionPlan.upsert({
+    where: { slug: "premium" },
+    update: {},
+    create: { name: "Premium", slug: "premium", price: 999, duration: 365, features: "Everything in Pro,Annual plan,Resume analytics,ATS optimization,Cover letter builder,LinkedIn optimization", resumeDownloads: 0, isPopular: false },
+  });
+
+  // Payment Settings (empty - admin needs to configure)
+  const existingSettings = await prisma.paymentSettings.findFirst();
+  if (!existingSettings) {
+    await prisma.paymentSettings.create({ data: { razorpayKeyId: "", razorpayKeySecret: "", razorpayWebhookSecret: "", isTestMode: true, currency: "INR", taxPercentage: 18 } });
+  }
+
   console.log("Database seeded successfully!");
   console.log(`Admin user: admin@techible.io / admin123`);
   console.log(`Test user: user@techible.io / user123`);

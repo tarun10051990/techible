@@ -20,6 +20,9 @@ model User {
   posts         Post[]
   applications  Application[]
   enrollments   Enrollment[]
+  subscriptions Subscription[]
+  payments      Payment[]
+  resumes       Resume[]
 }
 
 model Internship {
@@ -244,4 +247,81 @@ model SupportTicket {
   trackingId  String   @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model SubscriptionPlan {
+  id            String   @id @default(cuid())
+  name          String   // Free, Pro, Premium
+  slug          String   @unique
+  price         Float    @default(0)
+  duration      Int      @default(30) // days
+  features      String   // comma-separated features
+  resumeDownloads Int    @default(0) // 0 = unlimited
+  isActive      Boolean  @default(true)
+  isPopular     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id          String   @id @default(cuid())
+  userId      String
+  planId      String
+  status      String   @default("active") // active, expired, cancelled
+  startDate   DateTime @default(now())
+  endDate     DateTime
+  paymentId   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+  plan        SubscriptionPlan @relation(fields: [planId], references: [id])
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  userId          String
+  amount          Float
+  currency        String   @default("INR")
+  type            String   // subscription, course
+  referenceId     String?  // courseId or planId
+  razorpayOrderId String?
+  razorpayPaymentId String?
+  razorpaySignature String?
+  status          String   @default("pending") // pending, completed, failed, refunded
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+model Resume {
+  id            String   @id @default(cuid())
+  userId        String
+  templateId    String   @default("professional")
+  fullName      String
+  email         String
+  phone         String?
+  location      String?
+  title         String?  // Job title / headline
+  summary       String?
+  experience    String?  // JSON string
+  education     String?  // JSON string
+  skills        String?  // comma-separated
+  projects      String?  // JSON string
+  certifications String? // JSON string
+  languages     String?  // comma-separated
+  socialLinks   String?  // JSON string
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model PaymentSettings {
+  id                  String  @id @default(cuid())
+  razorpayKeyId       String  @default("")
+  razorpayKeySecret   String  @default("")
+  razorpayWebhookSecret String @default("")
+  isTestMode          Boolean @default(true)
+  currency            String  @default("INR")
+  taxPercentage       Float   @default(18)
 }

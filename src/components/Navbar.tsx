@@ -119,6 +119,9 @@ export default function Navbar() {
                     Admin
                   </Link>
                 )}
+                <Link href="/resume-builder" className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-[#1a73e8]">
+                  <i className="fa-solid fa-file-lines text-xs mr-1"></i>Resume
+                </Link>
                 <span className="text-sm font-semibold text-gray-700">{user.name}</span>
                 <button onClick={handleLogout} className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-red-500">
                   Logout

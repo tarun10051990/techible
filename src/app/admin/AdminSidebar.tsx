@@ -14,6 +14,8 @@ const navItems = [
   { href: "/admin/posts", label: "Posts", icon: "fa-newspaper" },
   { href: "/admin/summer-schools", label: "Summer Schools", icon: "fa-school" },
   { href: "/admin/pages", label: "Pages", icon: "fa-file-lines" },
+  { href: "/admin/subscriptions", label: "Subscriptions", icon: "fa-crown" },
+  { href: "/admin/payments", label: "Payments", icon: "fa-credit-card" },
   { href: "/admin/users", label: "Users", icon: "fa-users" },
   { href: "/admin/support", label: "Support", icon: "fa-headset" },
   { href: "/admin/settings", label: "Settings", icon: "fa-gear" },

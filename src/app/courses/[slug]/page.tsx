@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import EnrollButton from "./EnrollButton";
 
 export const dynamic = "force-dynamic";
 
@@ -41,9 +42,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
 
             <div className="mt-6 p-4 bg-blue-50 rounded-xl flex items-center justify-between">
               <span className="text-2xl font-extrabold text-gray-900">{course.price === 0 ? "Free" : `₹${course.price}`}</span>
-              <Link href="/login" className="px-6 py-2.5 bg-[#1a73e8] text-white font-bold rounded-full hover:bg-[#1557b0] transition-colors">
-                Enroll Now
-              </Link>
+              <EnrollButton courseId={course.id} price={course.price} />
             </div>
 
             <div className="mt-8">
