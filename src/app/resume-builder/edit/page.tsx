@@ -66,15 +66,28 @@ function ResumeEditContent() {
 
   async function handleSave() {
     setSaving(true);
-    const res = await fetch("/api/resume", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: resumeId, templateId, fullName, email, phone, location, title, summary, experience, education, skills, projects, languages }),
-    });
-    const data = await res.json();
-    setSaving(false);
-    if (data.resume) {
-      router.push(`/resume-builder/preview?id=${data.resume.id}`);
+    try {
+      const res = await fetch("/api/resume", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: resumeId, templateId, fullName, email, phone, location, title, summary, experience, education, skills, projects, languages }),
+      });
+      const text = await res.text();
+      if (!text) {
+        alert("Server error. Please try again.");
+        setSaving(false);
+        return;
+      }
+      const data = JSON.parse(text);
+      setSaving(false);
+      if (data.error) {
+        alert(data.error);
+      } else if (data.resume) {
+        router.push(`/resume-builder/preview?id=${data.resume.id}`);
+      }
+    } catch (err) {
+      setSaving(false);
+      alert("Failed to save resume. Please try again.");
     }
   }
 
