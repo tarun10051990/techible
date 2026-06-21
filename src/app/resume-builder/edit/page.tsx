@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import SkillsInput from "@/components/SkillsInput";
 
 type ExperienceItem = { company: string; role: string; duration: string; description: string };
 type EducationItem = { institution: string; degree: string; year: string; grade: string };
@@ -172,8 +173,8 @@ function ResumeEditContent() {
         {/* Skills & Languages */}
         <section className="bg-white rounded-2xl border p-6">
           <h2 className="font-bold text-lg text-gray-900 mb-4"><i className="fa-solid fa-wrench text-[#1a73e8] mr-2"></i>Skills & Languages</h2>
-          <div className="space-y-4">
-            <div><label className="text-sm font-semibold text-gray-700">Skills (comma-separated)</label><input value={skills} onChange={e => setSkills(e.target.value)} className="w-full mt-1 px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-[#1a73e8] outline-none" placeholder="React, Node.js, Python, SQL..." /></div>
+          <div className="space-y-5">
+            <SkillsInput value={skills} onChange={setSkills} />
             <div><label className="text-sm font-semibold text-gray-700">Languages (comma-separated)</label><input value={languages} onChange={e => setLanguages(e.target.value)} className="w-full mt-1 px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-[#1a73e8] outline-none" placeholder="English, Hindi..." /></div>
           </div>
         </section>
