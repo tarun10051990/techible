@@ -343,42 +343,54 @@ export default function ResumeBuilderPage() {
           )}
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {templates.map(t => (
             <div
               key={t.id}
               onClick={() => setSelectedTemplate(t.id)}
-              className={`cursor-pointer rounded-2xl border-2 overflow-hidden transition-all hover:shadow-xl group ${
-                selectedTemplate === t.id ? "border-[#1a73e8] shadow-lg ring-2 ring-blue-100" : "border-gray-200 hover:border-gray-300"
-              }`}
+              className="cursor-pointer group"
             >
-              {/* Template Preview */}
-              <div className="aspect-[3/4] relative overflow-hidden bg-gray-50">
-                <TemplatePreview template={t} />
-                {/* Overlay on hover */}
-                <div className={`absolute inset-0 flex items-center justify-center transition-opacity ${
-                  selectedTemplate === t.id ? "opacity-0" : "opacity-0 group-hover:opacity-100"
-                }`} style={{ background: "rgba(0,0,0,0.3)" }}>
-                  <span className="bg-white text-gray-900 px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                    <i className="fa-solid fa-eye mr-1"></i> Select
-                  </span>
-                </div>
-                {/* Selected check */}
-                {selectedTemplate === t.id && (
-                  <div className="absolute top-2 right-2 w-6 h-6 bg-[#1a73e8] rounded-full flex items-center justify-center">
-                    <i className="fa-solid fa-check text-white text-xs"></i>
+              {/* Document Page */}
+              <div className={`relative transition-all duration-300 ${
+                selectedTemplate === t.id
+                  ? "scale-[1.02] -translate-y-1"
+                  : "group-hover:scale-[1.01] group-hover:-translate-y-0.5"
+              }`}>
+                {/* Page shadow layers for depth */}
+                <div className="absolute inset-0 translate-y-2 translate-x-1 bg-gray-200 rounded-lg"></div>
+                <div className="absolute inset-0 translate-y-1 translate-x-0.5 bg-gray-100 rounded-lg"></div>
+
+                {/* Actual page */}
+                <div className={`relative aspect-[210/297] rounded-lg overflow-hidden border-2 transition-all ${
+                  selectedTemplate === t.id
+                    ? "border-[#1a73e8] shadow-xl shadow-blue-100"
+                    : "border-gray-200 shadow-lg group-hover:border-gray-300 group-hover:shadow-xl"
+                }`}>
+                  <TemplatePreview template={t} />
+
+                  {/* Hover overlay */}
+                  <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 transition-opacity duration-200 ${
+                    selectedTemplate === t.id ? "opacity-0 pointer-events-none" : "opacity-0 group-hover:opacity-100"
+                  }`} style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(1px)" }}>
+                    <span className="bg-[#1a73e8] text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg">
+                      <i className="fa-solid fa-check mr-1.5"></i> Use This Template
+                    </span>
                   </div>
-                )}
-              </div>
-              {/* Template Info */}
-              <div className="p-4 bg-white">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-gray-900">{t.name}</h3>
+
+                  {/* Selected badge */}
                   {selectedTemplate === t.id && (
-                    <span className="text-xs bg-blue-50 text-[#1a73e8] px-2 py-0.5 rounded-full font-semibold">Selected</span>
+                    <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-[#1a73e8] text-white px-3 py-1 rounded-full shadow-lg">
+                      <i className="fa-solid fa-check text-[10px]"></i>
+                      <span className="text-xs font-semibold">Selected</span>
+                    </div>
                   )}
                 </div>
-                <p className="text-sm text-gray-500 mt-1">{t.description}</p>
+              </div>
+
+              {/* Template Name */}
+              <div className="mt-4 text-center">
+                <h3 className={`font-bold transition-colors ${selectedTemplate === t.id ? "text-[#1a73e8]" : "text-gray-900"}`}>{t.name}</h3>
+                <p className="text-xs text-gray-500 mt-0.5">{t.description}</p>
               </div>
             </div>
           ))}
